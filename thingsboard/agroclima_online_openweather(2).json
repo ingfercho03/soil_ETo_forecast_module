@@ -1,0 +1,183 @@
+{
+  "ruleChain": {
+    "additionalInfo": {
+      "description": ""
+    },
+    "name": "Agroclima_online_openweather",
+    "type": "CORE",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": null,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 49,
+          "layoutY": 224
+        },
+        "type": "org.thingsboard.rule.engine.debug.TbMsgGeneratorNode",
+        "name": "Generar_Request",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "msgCount": 0,
+          "periodInSeconds": 3600,
+          "scriptLang": "TBEL",
+          "jsScript": "var msg = { temp: 42, humidity: 77 };\nvar metadata = { data: 40 };\nvar msgType = \"POST_TELEMETRY_REQUEST\";\n\nreturn { msg: msg, metadata: metadata, msgType: msgType };",
+          "tbelScript": "return { msg: {}, metadata: {}, msgType: \"POST_TELEMETRY_REQUEST\" };",
+          "queueName": null,
+          "originatorId": "3d249030-ed5a-11ee-936e-d7c6ff84ce5c",
+          "originatorType": "ASSET"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 226,
+          "layoutY": 309
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
+        "name": "API Key",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "dataToFetch": "ATTRIBUTES",
+          "dataMapping": {
+            "APPID": "APPID"
+          },
+          "fetchTo": "METADATA"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 406,
+          "layoutY": 229
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "latitude_longitude",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "tellFailureIfAbsent": true,
+          "fetchTo": "METADATA",
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "latitude",
+            "units",
+            "longitud"
+          ],
+          "latestTsKeyNames": [],
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 581,
+          "layoutY": 301
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "get_data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "restEndpointUrlPattern": "https://api.openweathermap.org/data/2.5/weather?lat=${ss_latitude}&lon=${ss_longitud}&units=${ss_units}&APPID=${APPID}",
+          "requestMethod": "GET",
+          "useSimpleClientHttpFactory": false,
+          "parseToPlainText": false,
+          "ignoreRequestBody": false,
+          "enableProxy": false,
+          "useSystemProxyProperties": false,
+          "proxyScheme": null,
+          "proxyHost": null,
+          "proxyPort": 0,
+          "proxyUser": null,
+          "proxyPassword": null,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": null,
+          "maxQueueSize": null,
+          "credentials": {
+            "type": "anonymous"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 770,
+          "layoutY": 229
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Fetch Data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};",
+          "tbelScript": "var newMsg = {\n    \"outsideTemp\":msg.main.temp,\n    \"outsideMaxtemp\":msg.main.temp_max,\n    \"outsideHumidity\":msg.main.humidity\n};\n\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 980,
+          "layoutY": 300
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "save data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "defaultTTL": 0,
+          "skipLatestPersistence": false,
+          "useServerTs": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 5,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

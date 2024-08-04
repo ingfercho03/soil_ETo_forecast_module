@@ -1,0 +1,158 @@
+{
+  "ruleChain": {
+    "additionalInfo": {
+      "description": ""
+    },
+    "name": "forescast_agro_satelital",
+    "type": "CORE",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": null,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 78,
+          "layoutY": 261
+        },
+        "type": "org.thingsboard.rule.engine.debug.TbMsgGeneratorNode",
+        "name": "Generate_request",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "msgCount": 0,
+          "periodInSeconds": 84200,
+          "scriptLang": "TBEL",
+          "jsScript": "var msg = { temp: 42, humidity: 77 };\nvar metadata = { data: 40 };\nvar msgType = \"POST_TELEMETRY_REQUEST\";\n\nreturn { msg: msg, metadata: metadata, msgType: msgType };",
+          "tbelScript": "return { msg: {}, metadata: {}, msgType: \"POST_TELEMETRY_REQUEST\" };",
+          "queueName": null,
+          "originatorId": "3d249030-ed5a-11ee-936e-d7c6ff84ce5c",
+          "originatorType": "ASSET"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 309,
+          "layoutY": 189
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "coordenadas",
+        "debugMode": false,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "tellFailureIfAbsent": true,
+          "fetchTo": "METADATA",
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "latitude",
+            "longitud"
+          ],
+          "latestTsKeyNames": [],
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 550,
+          "layoutY": 259
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "get_satel_data_forecast",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "restEndpointUrlPattern": "http://127.0.0.1:8000/forecastWeather/?lat=5.1978685&lon=-74.9840391",
+          "requestMethod": "GET",
+          "useSimpleClientHttpFactory": false,
+          "parseToPlainText": false,
+          "ignoreRequestBody": false,
+          "enableProxy": false,
+          "useSystemProxyProperties": false,
+          "proxyScheme": null,
+          "proxyHost": null,
+          "proxyPort": 0,
+          "proxyUser": null,
+          "proxyPassword": null,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": null,
+          "maxQueueSize": null,
+          "credentials": {
+            "type": "anonymous"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 736,
+          "layoutY": 198
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "transform_data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};",
+          "tbelScript": "var newMsg1 = {\n    \"ETo_pred\":msg.Dato0.ETo_pred,\n    \"SM_pred\":msg.Dato0.SM_pred,\n    \"ICU_pred\":msg.Dato0.ETo_pred - msg.Dato0.SM_pred\n};\n\nvar date1 = msg.Dato0.ts;\nvar newTimestamp1 = Date.parse(date1);\n\nvar metadata1 = {\n    ts:newTimestamp1,\n};\n\nvar newMsg2 = {\n    \"ETo_pred\":msg.Dato0.ETo_pred,\n    \"SM_pred\":msg.Dato0.SM_pred,\n    \"ICU_pred\":msg.Dato0.ETo_pred - msg.Dato0.SM_pred -0.40\n};\nvar date2 = msg.Dato1.ts;\nvar newTimestamp2 = Date.parse(date2);\nvar metadata2 = {\n    ts:newTimestamp2,\n};\n\nvar newMsg3 = {\n    \"ETo_pred\":msg.Dato0.ETo_pred,\n    \"SM_pred\":msg.Dato0.SM_pred,\n    \"ICU_pred\":msg.Dato0.ETo_pred - msg.Dato0.SM_pred\n};\nvar date3 = msg.Dato2.ts;\nvar newTimestamp3 = Date.parse(date3);\nvar metadata3 = {\n    ts:newTimestamp3,\n};\nreturn [\n            {msg: newMsg1, metadata: metadata1 , msgType: msgType},\n            {msg: newMsg2, metadata: metadata2, msgType: msgType},\n            {msg: newMsg3, metadata: metadata3 , msgType: msgType}\n       ];"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 946,
+          "layoutY": 260
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "save_timeseries",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "defaultTTL": 0,
+          "skipLatestPersistence": false,
+          "useServerTs": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

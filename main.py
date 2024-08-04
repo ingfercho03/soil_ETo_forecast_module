@@ -68,7 +68,7 @@ def check_datos(start_date,end_date,df):
     return df_sensor
 
 def precipitaciones(start_date, end_date,roi):
-    dataset = 'JAXA/GPM_L3/GSMaP/v6/operational'
+    dataset = 'JAXA/GPM_L3/GSMaP/v7/operational'
     sensor = ['hourlyPrecipRate']
     df_time_series = series_tiempo(start_date,end_date,roi,dataset,sensor)
     df_time_series['Date_format']= pd.to_datetime(df_time_series['Date'], format='%b %d %Y')
@@ -76,6 +76,7 @@ def precipitaciones(start_date, end_date,roi):
     Precipitacion_day = df_time_series['Sensor_Values'].resample('D').sum()
     df_time_Precipitacion_day = Precipitacion_day.to_frame()
     df_precipitacion_day = check_datos(start_date,end_date,df_time_Precipitacion_day)
+    #print(df_precipitacion_day)
     return df_precipitacion_day
     #return df_time_Precipitacion_day['Sensor_Values'].to_dict()
 
@@ -255,7 +256,7 @@ def model_predict_SM(roi):
     model_predict_SM = pickle.load(open('modelo_humedad_suelo.pkl','rb'))
     current_date = datetime.now().date() - timedelta(days=1)
     end_date = current_date.strftime("%Y-%m-%d")
-    days_ago = current_date - timedelta(days=12)
+    days_ago = current_date - timedelta(days=18)
     start_date= days_ago.strftime("%Y-%m-%d")
     soilM_his = humedad_suelo(start_date, end_date,roi)
     soilM_his.dropna(inplace=True)

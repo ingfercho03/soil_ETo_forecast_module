@@ -1,0 +1,158 @@
+{
+  "ruleChain": {
+    "additionalInfo": {
+      "description": ""
+    },
+    "name": "agroclima_satelital",
+    "type": "CORE",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": null,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 49,
+          "layoutY": 244
+        },
+        "type": "org.thingsboard.rule.engine.debug.TbMsgGeneratorNode",
+        "name": "Generar_requets",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "msgCount": 0,
+          "periodInSeconds": 84200,
+          "scriptLang": "TBEL",
+          "jsScript": "var msg = { temp: 42, humidity: 77 };\nvar metadata = { data: 40 };\nvar msgType = \"POST_TELEMETRY_REQUEST\";\n\nreturn { msg: msg, metadata: metadata, msgType: msgType };",
+          "tbelScript": "return { msg: {}, metadata: {}, msgType: \"POST_TELEMETRY_REQUEST\" };",
+          "queueName": null,
+          "originatorId": "3d249030-ed5a-11ee-936e-d7c6ff84ce5c",
+          "originatorType": "ASSET"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 261,
+          "layoutY": 179
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "coordenadas",
+        "debugMode": false,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "tellFailureIfAbsent": true,
+          "fetchTo": "METADATA",
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "latitude",
+            "longitud"
+          ],
+          "latestTsKeyNames": [],
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 452,
+          "layoutY": 245
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "get_satel_data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 1,
+        "configuration": {
+          "restEndpointUrlPattern": "http://127.0.0.1:8000/satweather/?lat=${ss_latitude}&lon=${ss_longitud}",
+          "requestMethod": "GET",
+          "useSimpleClientHttpFactory": false,
+          "parseToPlainText": false,
+          "ignoreRequestBody": false,
+          "enableProxy": false,
+          "useSystemProxyProperties": false,
+          "proxyScheme": null,
+          "proxyHost": null,
+          "proxyPort": 0,
+          "proxyUser": null,
+          "proxyPassword": null,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": null,
+          "maxQueueSize": null,
+          "credentials": {
+            "type": "anonymous"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 641,
+          "layoutY": 176
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "transform_data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "",
+          "tbelScript": "var newMsg1 = {\n    \"Precip_satelital_his\":msg.Dato0.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato0.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato0.ETo\n};\n\nvar date1 = msg.Dato0.ts;\nvar newTimestamp1 = Date.parse(date1);\n\nvar metadata1 = {\n    ts:newTimestamp1,\n};\n\nvar newMsg2 = {\n    \"Precip_satelital_his\":msg.Dato1.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato1.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato1.ETo\n};\nvar date2 = msg.Dato1.ts;\nvar newTimestamp2 = Date.parse(date2);\nvar metadata2 = {\n    ts:newTimestamp2,\n};\n\nvar newMsg3 = {\n    \"Precip_satelital_his\":msg.Dato2.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato2.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato2.ETo\n    \n};\nvar date3 = msg.Dato2.ts;\nvar newTimestamp3 = Date.parse(date3);\nvar metadata3 = {\n    ts:newTimestamp3,\n};\n\nvar newMsg4 = {\n    \"Precip_satelital_his\":msg.Dato3.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato3.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato3.ETo\n};\nvar date4 = msg.Dato3.ts;\nvar newTimestamp4 = Date.parse(date4);\nvar metadata4 = {\n    ts:newTimestamp4,\n};\n\nvar newMsg5 = {\n    \"Precip_satelital_his\":msg.Dato4.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato4.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato4.ETo\n};\nvar date5 = msg.Dato4.ts;\nvar newTimestamp5 = Date.parse(date5);\nvar metadata5 = {\n    ts:newTimestamp5,\n};\n\nvar newMsg6 = {\n    \"Precip_satelital_his\":msg.Dato5.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato5.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato5.ETo\n};\nvar date6 = msg.Dato5.ts;\nvar newTimestamp6 = Date.parse(date6);\nvar metadata6 = {\n    ts:newTimestamp6,\n};\n\nvar newMsg7 = {\n    \"Precip_satelital_his\":msg.Dato6.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato6.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato6.ETo\n};\nvar date7 = msg.Dato6.ts;\nvar newTimestamp7 = Date.parse(date7);\nvar metadata7 = {\n    ts:newTimestamp7,\n};\n\nvar newMsg8 = {\n    \"Precip_satelital_his\":msg.Dato7.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato7.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato7.ETo\n};\nvar date8 = msg.Dato7.ts;\nvar newTimestamp8 = Date.parse(date8);\nvar metadata8 = {\n    ts:newTimestamp8,\n};\n\nvar newMsg9 = {\n    \"Precip_satelital_his\":msg.Dato8.Precipitacion,\n    \"Humedad_satelital_his\":msg.Dato8.Humedad_Suelo,\n    \"ETo_satelital_his\":msg.Dato8.ETo\n};\nvar date9 = msg.Dato8.ts;\nvar newTimestamp9 = Date.parse(date9);\nvar metadata9 = {\n    ts:newTimestamp9,\n};\nreturn [\n            {msg: newMsg1, metadata: metadata1 , msgType: msgType},\n            {msg: newMsg2, metadata: metadata2, msgType: msgType},\n            {msg: newMsg3, metadata: metadata3 , msgType: msgType},\n            {msg: newMsg4, metadata: metadata4, msgType: msgType},\n            {msg: newMsg5, metadata: metadata5 , msgType: msgType},\n            {msg: newMsg6, metadata: metadata6, msgType: msgType},\n            {msg: newMsg7, metadata: metadata7, msgType: msgType},\n            {msg: newMsg8, metadata: metadata8, msgType: msgType},\n            {msg: newMsg9, metadata: metadata9, msgType: msgType}\n       ];"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 838,
+          "layoutY": 244
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "save_history_data",
+        "debugMode": true,
+        "singletonMode": false,
+        "configurationVersion": 0,
+        "configuration": {
+          "defaultTTL": 0,
+          "skipLatestPersistence": false,
+          "useServerTs": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}
