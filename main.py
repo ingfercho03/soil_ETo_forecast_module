@@ -199,8 +199,8 @@ def index():
 
 def get_sat_data(lat: float,lon: float):
 
-    service_account = 'ingferchogee@ee-ingfercho03.iam.gserviceaccount.com'
-    credentials = ee.ServiceAccountCredentials(service_account, 'ee-ingfercho03-823327c28642.json')
+    service_account = 'xxxxx'
+    credentials = ee.ServiceAccountCredentials(service_account, 'xxxxx')
     ee.Initialize(credentials)
 
     # Region of interest (ROI)
@@ -284,8 +284,8 @@ def model_predict_ETo(roi,lon,lat):
 
 @app.get("/forecastWeather/")
 def modelos_predict(lat:float, lon:float):
-    service_account = 'ingferchogee@ee-ingfercho03.iam.gserviceaccount.com'
-    credentials = ee.ServiceAccountCredentials(service_account, 'ee-ingfercho03-823327c28642.json')
+    service_account = 'xxxxx'
+    credentials = ee.ServiceAccountCredentials(service_account, 'xxxxx')
     ee.Initialize(credentials)
     roi = ee.Geometry.Point(lon, lat)
     #precipi_predict= model_predict_precipitacion(roi)
