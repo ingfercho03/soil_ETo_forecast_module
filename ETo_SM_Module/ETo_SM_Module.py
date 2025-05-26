@@ -11,18 +11,6 @@ from pydantic import BaseModel
 import uvicorn
 import sys
 
-try:
-    service_account_input=os.environ["account_gge"]
-    #service_account_input=os.environ.get("account_gge", "input account GGE")
-    auth_file=os.environ["auth_file"]
-    #auth_file=os.environ.get("auth_file", "input authentication file")
-except KeyError as e:
-        print("Input account GGE and authentication file in json format ")
-        print("example:account_gge=gge_account@ee-gge_account.iam.gserviceaccount.com auth_file=ee-gee_accountxxxxx.json python eto_sm_module.py")
-        sys.exit(1)
-
-app = FastAPI()
-
 def series_tiempo(start_date, end_date, roi, dataset, sensor):
   
     collection = (ee.ImageCollection(dataset)
@@ -203,51 +191,6 @@ def eto_var(start_date, end_date,roi,lon,lat):
     #return df_eto_his
     return df_eto_his
 
-@app.get("/")
-
-def index():
-    return{"message" : "Completar la URL y campos"}
-
-@app.get("/satweather/")
-
-def get_sat_data(lat: float,lon: float):
-
-    service_account =service_account_input #'ingferchogee@ee-ingfercho03.iam.gserviceaccount.com'
-    credentials = ee.ServiceAccountCredentials(service_account, auth_file)#'ee-ingfercho03-5525f8850b4d.json'
-    ee.Initialize(credentials)
-
-    # Region of interest (ROI)
-    #roi = ee.Geometry.Point(-74.9840391, 5.1978685)  # Finca San Luis
-    roi = ee.Geometry.Point(lon, lat) 
-    current_date = datetime.now().date() - timedelta(days=1)
-    end_date = current_date.strftime("%Y-%m-%d")
-    seven_days_ago = current_date - timedelta(days=10)
-    start_date= seven_days_ago.strftime("%Y-%m-%d")
-    precip_his = precipitaciones(start_date, end_date,roi)
-    humedad_suelo_his = humedad_suelo(start_date, end_date,roi)
-    df_eto_his = df_eto_CFSV2(start_date, end_date,roi,lon,lat)
-    eto_his = check_datos(start_date,end_date,df_eto_his)
-    #eto_his = eto_var(start_date, end_date,roi,lon,lat)
-    #print(eto_his)
-
-    dict_his={}
-    for i, j in enumerate (precip_his.index):
-        ts = str(j)
-        precipitacion= precip_his['Sensor_Values'].loc[ts].round(3)
-        humedadSuelo= humedad_suelo_his['Sensor_Values'].loc[ts].round(3)
-        etoVar = eto_his['Sensor_Values'].loc[ts].round(3)
-        #print(etoVar)
-        if np.isnan(precipitacion):
-            precipitacion = None
-        if np.isnan(humedadSuelo):
-           humedadSuelo = None 
-        if np.isnan(etoVar):
-            #print(etoVar)
-            etoVar= None
-        dict_his["Dato{}".format(i)]= {"ts":ts, "Precipitacion":precipitacion, "Humedad_Suelo":humedadSuelo, "ETo":etoVar}
-    
-    return dict_his
-
 def model_predict_precipitacion(roi):
     model_predict_Precip = pickle.load(open('modelo_Precipitaciones.pkl','rb'))
     current_date = datetime.now().date() - timedelta(days=1)
@@ -297,31 +240,78 @@ def model_predict_ETo(roi,lon,lat):
     prediction= model_predict_ETo.predict(steps,last_window=last_window)
     return prediction
 
-@app.get("/forecastWeather/")
-def modelos_predict(lat:float, lon:float):
+def create_app(account_gge:str,auth_file:str)-> FastAPI:
 
-    service_account = service_account_input#'ingferchogee@ee-ingfercho03.iam.gserviceaccount.com'
-    credentials = ee.ServiceAccountCredentials(service_account, auth_file) #'ee-ingfercho03-5525f8850b4d.json'
-    ee.Initialize(credentials)
-    roi = ee.Geometry.Point(lon, lat)
-    #precipi_predict= model_predict_precipitacion(roi)
-    soilM_predict=model_predict_SM(roi)
-    ETo_predict=model_predict_ETo(roi,lon,lat)
-    #print(soilM_predict)
-    #print(ETo_predict)
-    dict_predict={}
-    current_day=datetime.now().date().strftime("%Y-%m-%d")
-    i=0
-    for j in (ETo_predict.index):
-        ts= str(j)
-        #if ts >= current_day:
-        ETo_predict_value= ETo_predict[ts]
-        SM_predict_value= soilM_predict[ts]
-        dict_predict["Dato{}".format(i)]={"ts":ts,"ETo_pred":ETo_predict_value,"SM_pred":SM_predict_value}
-        i+=1
-    return dict_predict
+    app = FastAPI()
+    @app.get("/")
 
-if __name__== "__main__":
-    uvicorn.run("main:app", host="127.0.0.1",port=8000,reload=True)
+    def index():
+        return{"message" : "Completar la URL y campos"}
+
+    @app.get("/satweather/")
+
+    def get_sat_data(lat: float,lon: float):
+
+        service_account =account_gge
+        credentials = ee.ServiceAccountCredentials(service_account, auth_file)
+        ee.Initialize(credentials)
+
+        # Region of interest (ROI)
+        #roi = ee.Geometry.Point(-74.9840391, 5.1978685)  # Finca San Luis
+        roi = ee.Geometry.Point(lon, lat) 
+        current_date = datetime.now().date() - timedelta(days=1)
+        end_date = current_date.strftime("%Y-%m-%d")
+        seven_days_ago = current_date - timedelta(days=10)
+        start_date= seven_days_ago.strftime("%Y-%m-%d")
+        precip_his = precipitaciones(start_date, end_date,roi)
+        humedad_suelo_his = humedad_suelo(start_date, end_date,roi)
+        df_eto_his = df_eto_CFSV2(start_date, end_date,roi,lon,lat)
+        eto_his = check_datos(start_date,end_date,df_eto_his)
+        #eto_his = eto_var(start_date, end_date,roi,lon,lat)
+        #print(eto_his)
+
+        dict_his={}
+        for i, j in enumerate (precip_his.index):
+            ts = str(j)
+            precipitacion= precip_his['Sensor_Values'].loc[ts].round(3)
+            humedadSuelo= humedad_suelo_his['Sensor_Values'].loc[ts].round(3)
+            etoVar = eto_his['Sensor_Values'].loc[ts].round(3)
+            #print(etoVar)
+            if np.isnan(precipitacion):
+                precipitacion = None
+            if np.isnan(humedadSuelo):
+                humedadSuelo = None 
+            if np.isnan(etoVar):
+                #print(etoVar)
+                etoVar= None
+            dict_his["Dato{}".format(i)]= {"ts":ts, "Precipitacion":precipitacion, "Humedad_Suelo":humedadSuelo, "ETo":etoVar}
+        
+        return dict_his
+
+    @app.get("/forecastWeather/")
+    def modelos_predict(lat:float, lon:float):
+
+        service_account = account_gge
+        credentials = ee.ServiceAccountCredentials(service_account, auth_file)
+        ee.Initialize(credentials)
+        roi = ee.Geometry.Point(lon, lat)
+        #precipi_predict= model_predict_precipitacion(roi)
+        soilM_predict=model_predict_SM(roi)
+        ETo_predict=model_predict_ETo(roi,lon,lat)
+        #print(soilM_predict)
+        #print(ETo_predict)
+        dict_predict={}
+        current_day=datetime.now().date().strftime("%Y-%m-%d")
+        i=0
+        for j in (ETo_predict.index):
+            ts= str(j)
+            #if ts >= current_day:
+            ETo_predict_value= ETo_predict[ts]
+            SM_predict_value= soilM_predict[ts]
+            dict_predict["Dato{}".format(i)]={"ts":ts,"ETo_pred":ETo_predict_value,"SM_pred":SM_predict_value}
+            i+=1
+        return dict_predict
+    return app
+
 
 
