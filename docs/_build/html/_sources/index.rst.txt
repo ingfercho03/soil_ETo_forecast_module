@@ -1,18 +1,14 @@
 .. Satellite-Based Retrieval and Machine Learning Forecasting of Reference Evapotranspiration and Soil Moisture for Crop Irrigation Needs. documentation master file, created by
-   sphinx-quickstart.
+   sphinx-quickstart on Mon May 26 23:07:18 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Satellite-Based Retrieval and Machine Learning Forecasting of Reference Evapotranspiration and Soil Moisture for Crop Irrigation Needs. documentation!
-==============================================
-
-Contents:
+Welcome to Satellite-Based Retrieval and Machine Learning Forecasting of Reference Evapotranspiration and Soil Moisture for Crop Irrigation Needs.'s documentation!
+===================================================================================================================================================================
 
 .. toctree::
    :maxdepth: 2
-
-   getting-started
-   commands
+   :caption: Contents:
 
 
 
