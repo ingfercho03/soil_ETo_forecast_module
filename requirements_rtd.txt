@@ -1,3 +1,0 @@
-furo
-myst-parser
-sphinx=4.1.0
