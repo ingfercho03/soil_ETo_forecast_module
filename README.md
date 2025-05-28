@@ -37,7 +37,7 @@ This repository hosts the code and resources for a comprehensive module designed
 
 ### Installation
 
-To set up the project and install the necessary dependencies, please refer to the detailed installation instructions in our [Sphinx documentation](link-to-your-readthedocs-installation-section).
+To set up the project and install the necessary dependencies, please refer to the detailed installation instructions in our [Sphinx documentation](https://soil-eto-forecast-module.readthedocs.io/en/latest/).
 
 ## License
 
