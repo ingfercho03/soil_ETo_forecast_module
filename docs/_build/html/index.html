@@ -239,23 +239,95 @@
         <article role="main" id="furo-main-content">
           <section id="eto-and-soil-moisture-retrieval-and-forecasting-module">
 <h1>ETo and Soil Moisture Retrieval and Forecasting Module<a class="headerlink" href="#eto-and-soil-moisture-retrieval-and-forecasting-module" title="Permalink to this heading">¶</a></h1>
-<p>Module for retrieving reference evapotranspiration and soil moisture from satellite products and forecasting them using machine learning models for crop irrigation needs.</p>
+<p>This module provides functionalities for retrieving reference evapotranspiration (ETo) and soil moisture (SM) data from satellite products, and for forecasting these parameters using machine learning models. The primary goal is to support accurate crop irrigation needs assessment.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Satellite Data Retrieval:</strong> Access historical ETo and SM data as time series from satellite products.</p></li>
+<li><p><strong>Machine Learning Forecasting:</strong> Predict future ETo and SM values using integrated machine learning models.</p></li>
+<li><p><strong>API Interface:</strong> Exposes data retrieval and forecasting functionalities via a RESTful API for easy integration.</p></li>
+<li><p><strong>ThingsBoard Integration:</strong> Designed to facilitate data visualization and irrigation water requirement calculations within the ThingsBoard IoT platform.</p></li>
+</ul>
+</section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
-<p>To install the software, do:</p>
-<ol class="arabic simple">
-<li><p>Create a Python virtual environment</p></li>
-</ol>
+<p>To get started with the ETo and Soil Moisture module, follow these steps:</p>
+<section id="create-a-python-virtual-environment">
+<h3>1. Create a Python Virtual Environment<a class="headerlink" href="#create-a-python-virtual-environment" title="Permalink to this heading">¶</a></h3>
+<p>It is highly recommended to install the module within a dedicated Python virtual environment to avoid conflicts with other Python projects.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">eto_sm_module_test</span>
 </span><span class="n">source</span> <span class="n">eto_sm_module_test</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Install</p></li>
-</ol>
+</section>
+<section id="install-the-module">
+<h3>2. Install the Module<a class="headerlink" href="#install-the-module" title="Permalink to this heading">¶</a></h3>
+<p>Install the module directly from its GitHub repository:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ingfercho03</span><span class="o">/</span><span class="n">soil_ETo_forecast_module</span><span class="o">.</span><span class="n">git</span>
 </span></pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you encounter an error related to <code class="docutils literal notranslate"><span class="pre">wheel</span></code> during installation, please install the <code class="docutils literal notranslate"><span class="pre">wheel</span></code> package within your virtual environment first</p>
+</div>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<section id="execute-the-module-and-start-the-api-server">
+<h3>1. Execute the Module and Start the API Server<a class="headerlink" href="#execute-the-module-and-start-the-api-server" title="Permalink to this heading">¶</a></h3>
+<p>To run the module and start the API server, you need to provide your Google Earth Engine (GEE) service account credentials.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">eto_sm_module</span> <span class="o">--</span><span class="n">account_gge</span><span class="o">=</span><span class="s2">&quot;your-service-account@ee-xxx.iam.gserviceaccount.com&quot;</span> <span class="o">--</span><span class="n">auth_file</span><span class="o">=</span><span class="s2">&quot;your-auth.json&quot;</span>
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Replace &quot;your-service-account@ee-xxx.iam.gserviceaccount.com&quot; with your actual Google Earth Engine service account email.
+Replace &quot;your-auth.json&quot; with the path to your Google Earth Engine private key JSON file.
+</pre></div>
+</div>
+<p>Once executed, the API server will typically run on http://127.0.0.1:8000.</p>
+</section>
+<section id="accessing-the-api-documentation">
+<h3>2. Accessing the API Documentation<a class="headerlink" href="#accessing-the-api-documentation" title="Permalink to this heading">¶</a></h3>
+<p>After the server is running, you can access the interactive API documentation (Swagger UI) at:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">docs</span>
+</span></pre></div>
+</div>
+</section>
+<section id="api-endpoints">
+<h3>3. API Endpoints<a class="headerlink" href="#api-endpoints" title="Permalink to this heading">¶</a></h3>
+<p>The module exposes the following key API endpoints:</p>
+<p>a. /satweather - Retrieve Historical Satellite Data</p>
+<p>This API allows you to retrieve historical time-series data for reference evapotranspiration (ETo) and soil moisture (SM) based on satellite products for a given geographical location.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll">http://127.0.0.1:8000/satweather/?lat={your latitude}&amp;lon={your longitude}
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Replace {your latitude} and {your longitude} with the desired geographical coordinates.
+</pre></div>
+</div>
+<p>b. /forecastWeather - Retrieve Forecasted Data</p>
+<p>This API provides predictions of reference evapotranspiration (ETo) and soil moisture (SM) using machine learning models for a specified location.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll">http://127.0.0.1:8000/forecastWeather/?lat={your latitude}&amp;lon={your longitude}
+</span></pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Replace {your latitude} and {your longitude} with the desired geographical coordinates.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="thingsboard-usage-scenario">
+<h2>ThingsBoard Usage Scenario<a class="headerlink" href="#thingsboard-usage-scenario" title="Permalink to this heading">¶</a></h2>
+<p>This module can be integrated with the ThingsBoard IoT platform (https://thingsboard.io/) to visualize the retrieved and forecasted data on dashboards and to generate tables of irrigation water requirements.</p>
+<p>To connect ThingsBoard with this module, follow these steps:</p>
+<section id="configure-thingsboard-rule-engine">
+<h3>1. Configure ThingsBoard Rule Engine<a class="headerlink" href="#configure-thingsboard-rule-engine" title="Permalink to this heading">¶</a></h3>
+<p>Create a Rule Chain in ThingsBoard as illustrated in the figure below. This typically involves setting up nodes to interact with external REST APIs.</p>
+<p><img alt="Rule engine and nodes " src="_images/thingsboard_rule.png" /></p>
+</section>
+<section id="invoke-apis-from-rest-api-call-node">
+<h3>2. Invoke APIs from “REST API Call Node”<a class="headerlink" href="#invoke-apis-from-rest-api-call-node" title="Permalink to this heading">¶</a></h3>
+<p>Within the “REST API Call Node” in your ThingsBoard Rule Chain, configure it to invoke the appropriate API endpoints provided by this module (e.g., /satweather or /forecastWeather) to fetch the required data. Refer to the ThingsBoard documentation for detailed instructions on configuring REST API calls.</p>
+<p>Note: This documentation assumes basic familiarity with Python, virtual environments, and REST APIs. For detailed information on Google Earth Engine authentication, please refer to the official GEE documentation.</p>
+</section>
 </section>
 </section>
 
@@ -297,7 +369,23 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">ETo and Soil Moisture Retrieval and Forecasting Module</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#create-a-python-virtual-environment">1. Create a Python Virtual Environment</a></li>
+<li><a class="reference internal" href="#install-the-module">2. Install the Module</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#execute-the-module-and-start-the-api-server">1. Execute the Module and Start the API Server</a></li>
+<li><a class="reference internal" href="#accessing-the-api-documentation">2. Accessing the API Documentation</a></li>
+<li><a class="reference internal" href="#api-endpoints">3. API Endpoints</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#thingsboard-usage-scenario">ThingsBoard Usage Scenario</a><ul>
+<li><a class="reference internal" href="#configure-thingsboard-rule-engine">1. Configure ThingsBoard Rule Engine</a></li>
+<li><a class="reference internal" href="#invoke-apis-from-rest-api-call-node">2. Invoke APIs from “REST API Call Node”</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
