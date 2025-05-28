@@ -14,16 +14,23 @@ This repository hosts the code and resources for a comprehensive module designed
 
 ## Repository Structure
 
-├── LICENSE                          <- License file for the project.
-├── requirements.txt                 <- Python dependencies required for the project.
-├── setup.py                         <- Package setup file for installation.
-├── README.md                        <- This comprehensive README file.
-├── data/                            <- Stores datasets
-├── docs/                            <- Sphinx documentation for the eto_sm_module.
-├── models/                          <- Machine learning models.
-├── notebooks/                       <- Jupyter notebooks for data exploration      time-series analysis and model training
-└── eto_sm_module/                   <- Core project source code. This is the main Python package.
-└── thingsboard/                     <- Configuration files for ThingsBoard integration.
+    ├── LICENSE            <- License file for the project.
+    ├── README.md          <- This comprehensive README file.
+    ├── data               <- Datasets.
+    │
+    ├── docs               <- Sphinx documentation for the eto_sm_module.
+    │
+    ├── models             <- Machine learning models.
+    │
+    ├── notebooks          <- Jupyter notebooks for data exploration time-series analysis and model training
+    │
+    ├── requirements.txt   <- Python dependencies required for the project.
+    │
+    ├── setup.py           <- Package setup file for installation.
+    │
+    └── eto_sm_module      <- Core project source code. This is the main Python package.
+    │
+    └── thingsboard        <- Configuration files for ThingsBoard integration.  
 
 
 ## Getting Started
