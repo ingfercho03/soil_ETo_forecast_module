@@ -19,4 +19,8 @@ setup(
     license="MIT",  
     packages=['eto_sm_module'],
     install_requires=required_dependencies,
+    include_package_data=True,
+    package_data={
+        'eto_sm_module': ['models/*.pkl'],
+    },
 )

@@ -6,7 +6,9 @@ from eto import ETo
 import pandas as pd
 import ee
 from fastapi import FastAPI
-
+from eto_sm_module import models
+#from importlib.resources import files
+import importlib.resources as pkg_resources
 #import json
 #import os
 #from pydantic import BaseModel
@@ -217,9 +219,15 @@ def model_predict_precipitacion(roi):
     prediction= model_predict_precip.predict(steps,last_window=last_window)
     return prediction
 
+def load_model(filename):
+
+    with pkg_resources.open_binary(models, filename) as f:
+        return pickle.load(f)
+    
 def model_predict_sm(roi):
     """This function predicts sm"""
-    model_predict_sm = pickle.load(open('./models/modelo_humedad_suelo.pkl','rb'))
+    #model_predict_sm = pickle.load(open('./models/modelo_humedad_suelo.pkl','rb'))
+    model_predict_sm = load_model('modelo_humedad_suelo.pkl')
     current_date = datetime.now().date() - timedelta(days=5)
     end_date = current_date.strftime("%Y-%m-%d")
     days_ago = current_date - timedelta(days=18)
@@ -235,7 +243,8 @@ def model_predict_sm(roi):
 
 def model_predict_eto(roi,lon,lat):
     """This function predicts eto"""
-    model_predict_eto = pickle.load(open('./models/modelo_ETo-2.pkl','rb'))
+    #model_predict_eto = pickle.load(open('./models/modelo_ETo-2.pkl','rb'))
+    model_predict_eto = load_model('modelo_ETo-2.pkl')
     current_date = datetime.now().date() - timedelta(days=4)
     end_date = current_date.strftime("%Y-%m-%d")
     days_ago = current_date - timedelta(days=31)
