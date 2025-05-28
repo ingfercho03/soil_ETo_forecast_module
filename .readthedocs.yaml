@@ -60,5 +60,6 @@ sphinx:
 python:
 
   install:
+      path: .
 
     - requirements: docs/requirements.txt
