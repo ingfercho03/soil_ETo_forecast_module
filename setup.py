@@ -21,6 +21,6 @@ setup(
     install_requires=required_dependencies,
     include_package_data=True,
     package_data={
-        'eto_sm_module.models': ['modelo_humedad_suelo.pkl'],
+        'eto_sm_module.models': ['modelo_humedad_suelo.pkl','modelo_ETo-2.pkl'],
     },
 )
