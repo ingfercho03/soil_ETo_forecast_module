@@ -221,7 +221,7 @@ def model_predict_precipitacion(roi):
 
 def load_model(filename):
 
-    with pkg_resources.open_binary(eto_sm_module.models, filename) as f:
+    with pkg_resources.open_binary('eto_sm_module.models', filename) as f:
         return pickle.load(f)
     
 def model_predict_sm(roi):
