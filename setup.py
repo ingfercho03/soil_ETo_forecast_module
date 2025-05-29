@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 requirements_file = 'requirements.txt'
 
@@ -17,7 +17,7 @@ setup(
     author_email='diego.rodriguez-t@mail.escuelaing.edu.co',
     url='https://github.com/ingfercho03/soil_ETo_forecast_module.git',
     license="MIT",  
-    packages=['eto_sm_module'],
+    packages=find_packages(),
     install_requires=required_dependencies,
     include_package_data=True,
     package_data={
