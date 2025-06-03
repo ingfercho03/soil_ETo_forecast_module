@@ -19,6 +19,9 @@ This module provides functionalities for retrieving reference evapotranspiration
 
 ## Installation
 
+> **Note:** This module was tested on **Ubuntu Linux 64-bit**. Compatibility with other operating systems has not been extensively verified.
+
+
 To get started with the ETo and Soil Moisture module, follow these steps:
 
 ### 1. Create a Python Virtual Environment
