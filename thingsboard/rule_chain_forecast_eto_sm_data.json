@@ -3,7 +3,7 @@
     "additionalInfo": {
       "description": ""
     },
-    "name": "Agroclima_online_openweather",
+    "name": "forescast_agro_satelital",
     "type": "CORE",
     "firstRuleNodeId": null,
     "root": false,
@@ -16,17 +16,17 @@
       {
         "additionalInfo": {
           "description": "",
-          "layoutX": 49,
-          "layoutY": 224
+          "layoutX": 78,
+          "layoutY": 261
         },
         "type": "org.thingsboard.rule.engine.debug.TbMsgGeneratorNode",
-        "name": "Generar_Request",
+        "name": "Generate_request",
         "debugMode": true,
         "singletonMode": false,
         "configurationVersion": 0,
         "configuration": {
           "msgCount": 0,
-          "periodInSeconds": 3600,
+          "periodInSeconds": 85300,
           "scriptLang": "TBEL",
           "jsScript": "var msg = { temp: 42, humidity: 77 };\nvar metadata = { data: 40 };\nvar msgType = \"POST_TELEMETRY_REQUEST\";\n\nreturn { msg: msg, metadata: metadata, msgType: msgType };",
           "tbelScript": "return { msg: {}, metadata: {}, msgType: \"POST_TELEMETRY_REQUEST\" };",
@@ -38,31 +38,12 @@
       {
         "additionalInfo": {
           "description": "",
-          "layoutX": 226,
-          "layoutY": 309
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
-        "name": "API Key",
-        "debugMode": true,
-        "singletonMode": false,
-        "configurationVersion": 1,
-        "configuration": {
-          "dataToFetch": "ATTRIBUTES",
-          "dataMapping": {
-            "APPID": "APPID"
-          },
-          "fetchTo": "METADATA"
-        }
-      },
-      {
-        "additionalInfo": {
-          "description": "",
-          "layoutX": 406,
-          "layoutY": 229
+          "layoutX": 309,
+          "layoutY": 189
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "latitude_longitude",
-        "debugMode": true,
+        "name": "coordenadas",
+        "debugMode": false,
         "singletonMode": false,
         "configurationVersion": 1,
         "configuration": {
@@ -72,7 +53,6 @@
           "sharedAttributeNames": [],
           "serverAttributeNames": [
             "latitude",
-            "units",
             "longitud"
           ],
           "latestTsKeyNames": [],
@@ -82,16 +62,16 @@
       {
         "additionalInfo": {
           "description": "",
-          "layoutX": 581,
-          "layoutY": 301
+          "layoutX": 550,
+          "layoutY": 259
         },
         "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
-        "name": "get_data",
+        "name": "get_satel_data_forecast",
         "debugMode": true,
         "singletonMode": false,
         "configurationVersion": 1,
         "configuration": {
-          "restEndpointUrlPattern": "https://api.openweathermap.org/data/2.5/weather?lat=${ss_latitude}&lon=${ss_longitud}&units=${ss_units}&APPID=${APPID}",
+          "restEndpointUrlPattern": "http://127.0.0.1:8000/forecastWeather/?lat=5.1978685&lon=-74.9840391",
           "requestMethod": "GET",
           "useSimpleClientHttpFactory": false,
           "parseToPlainText": false,
@@ -119,28 +99,28 @@
       {
         "additionalInfo": {
           "description": "",
-          "layoutX": 770,
-          "layoutY": 229
+          "layoutX": 736,
+          "layoutY": 198
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Fetch Data",
+        "name": "transform_data",
         "debugMode": true,
         "singletonMode": false,
         "configurationVersion": 0,
         "configuration": {
           "scriptLang": "TBEL",
           "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};",
-          "tbelScript": "var newMsg = {\n    \"outsideTemp\":msg.main.temp,\n    \"outsideMaxtemp\":msg.main.temp_max,\n    \"outsideHumidity\":msg.main.humidity\n};\n\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};"
+          "tbelScript": "var newMsg1 = {\n    \"ETo_pred\":msg.Dato0.ETo_pred,\n    \"SM_pred\":msg.Dato0.SM_pred,\n    \"ETc_pred\":msg.Dato0.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato0.ETo_pred * 1.05\n};\n\nvar date1 = msg.Dato0.ts;\nvar newTimestamp1 = Date.parse(date1);\n\nvar metadata1 = {\n    ts:newTimestamp1,\n};\n\nvar newMsg2 = {\n    \"ETo_pred\":msg.Dato1.ETo_pred,\n    \"SM_pred\":msg.Dato1.SM_pred,\n    \"ETc_pred\":msg.Dato1.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato1.ETo_pred * 1.05\n};\nvar date2 = msg.Dato1.ts;\nvar newTimestamp2 = Date.parse(date2);\nvar metadata2 = {\n    ts:newTimestamp2,\n};\n\nvar newMsg3 = {\n    \"ETo_pred\":msg.Dato2.ETo_pred,\n    \"SM_pred\":msg.Dato2.SM_pred,\n    \"ETc_pred\":msg.Dato2.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato2.ETo_pred * 1.05 -(7.2*0.70)\n};\nvar date3 = msg.Dato2.ts;\nvar newTimestamp3 = Date.parse(date3);\nvar metadata3 = {\n    ts:newTimestamp3,\n};\nvar newMsg4 = {\n    \"ETo_pred\":msg.Dato3.ETo_pred,\n    \"SM_pred\":msg.Dato3.SM_pred,\n    \"ETc_pred\":msg.Dato3.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato3.ETo_pred * 1.05 -(7.2*0.70)\n};\nvar date4 = msg.Dato3.ts;\nvar newTimestamp4 = Date.parse(date4);\nvar metadata4 = {\n    ts:newTimestamp4,\n};\nvar newMsg5 = {\n    \"ETo_pred\":msg.Dato4.ETo_pred,\n    \"SM_pred\":msg.Dato4.SM_pred,\n    \"ETc_pred\":msg.Dato4.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato4.ETo_pred * 1.05 -(7.2*0.70)\n};\nvar date5 = msg.Dato4.ts;\nvar newTimestamp5 = Date.parse(date5);\nvar metadata5 = {\n    ts:newTimestamp5,\n};\nvar newMsg6 = {\n    \"ETo_pred\":msg.Dato5.ETo_pred,\n    \"SM_pred\":msg.Dato5.SM_pred,\n    \"ETc_pred\":msg.Dato5.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato5.ETo_pred * 1.05 -(7.2*0.70)\n};\nvar date6 = msg.Dato5.ts;\nvar newTimestamp6 = Date.parse(date6);\nvar metadata6 = {\n    ts:newTimestamp6,\n};\n\nvar newMsg7 = {\n    \"ETo_pred\":msg.Dato6.ETo_pred,\n    \"SM_pred\":msg.Dato6.SM_pred,\n    \"ETc_pred\":msg.Dato6.ETo_pred * 1.05,\n    \"ICU_pred\":msg.Dato6.ETo_pred * 1.05 -(7.2*0.70)\n};\nvar date7 = msg.Dato6.ts;\nvar newTimestamp7 = Date.parse(date7);\nvar metadata7 = {\n    ts:newTimestamp7,\n};\nreturn [\n            {msg: newMsg1, metadata: metadata1 , msgType: msgType},\n            {msg: newMsg2, metadata: metadata2, msgType: msgType},\n            {msg: newMsg3, metadata: metadata3 , msgType: msgType},\n            {msg: newMsg4, metadata: metadata4 , msgType: msgType},\n            {msg: newMsg5, metadata: metadata5 , msgType: msgType},\n            {msg: newMsg6, metadata: metadata6 , msgType: msgType},\n            {msg: newMsg7, metadata: metadata7 , msgType: msgType}\n       ];"
         }
       },
       {
         "additionalInfo": {
           "description": "",
-          "layoutX": 980,
-          "layoutY": 300
+          "layoutX": 946,
+          "layoutY": 260
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
-        "name": "save data",
+        "name": "save_timeseries",
         "debugMode": true,
         "singletonMode": false,
         "configurationVersion": 0,
@@ -170,11 +150,6 @@
       {
         "fromIndex": 3,
         "toIndex": 4,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 5,
         "type": "Success"
       }
     ],

@@ -77,12 +77,12 @@
             "selectedTab": 0,
             "realtime": {
               "realtimeType": 1,
-              "timewindowMs": 60000,
-              "quickInterval": "CURRENT_WEEK_ISO",
+              "timewindowMs": 604800000,
+              "quickInterval": "CURRENT_WEEK",
               "interval": 1800000
             },
             "aggregation": {
-              "type": "AVG",
+              "type": "SUM",
               "limit": 200
             }
           },
@@ -241,8 +241,8 @@
             "selectedTab": 0,
             "realtime": {
               "realtimeType": 1,
-              "timewindowMs": 60000,
-              "quickInterval": "CURRENT_WEEK_ISO",
+              "timewindowMs": 604800000,
+              "quickInterval": "CURRENT_WEEK",
               "interval": 1800000
             },
             "aggregation": {
@@ -343,16 +343,26 @@
                 {
                   "name": "ICU_pred",
                   "type": "timeseries",
-                  "label": "Irrigation consumptive water ",
+                  "label": "CWR",
                   "color": "#2196f3",
                   "settings": {},
                   "_hash": 0.7914481570229959,
                   "units": "mm",
-                  "decimals": 3,
+                  "decimals": 6,
                   "aggregationType": null,
                   "funcBody": null,
                   "usePostProcessing": null,
                   "postFuncBody": null
+                },
+                {
+                  "name": "ETc_pred",
+                  "type": "timeseries",
+                  "label": "ETc",
+                  "color": "#4caf50",
+                  "settings": {},
+                  "_hash": 0.6841899480957329,
+                  "units": "mm",
+                  "decimals": 6
                 }
               ],
               "alarmFilterConfig": {
@@ -373,14 +383,15 @@
             "selectedTab": 0,
             "realtime": {
               "realtimeType": 1,
-              "timewindowMs": 60000,
-              "quickInterval": "CURRENT_WEEK_ISO",
+              "timewindowMs": 604800000,
+              "quickInterval": "CURRENT_WEEK",
               "interval": 1000
             },
             "aggregation": {
               "type": "NONE",
               "limit": 200
-            }
+            },
+            "timezone": null
           },
           "showTitle": true,
           "backgroundColor": "rgb(255, 255, 255)",
@@ -393,7 +404,7 @@
             "enableSearch": true,
             "enableSelectColumnDisplay": true
           },
-          "title": "Irrigation water",
+          "title": "Irrigation Water Requirements",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -409,10 +420,14 @@
           "iconColor": "rgba(0, 0, 0, 0.87)",
           "iconSize": "24px",
           "displayTimewindow": true,
-          "configMode": "basic",
+          "configMode": "advanced",
           "titleFont": null,
           "titleColor": null,
-          "titleIcon": null
+          "titleIcon": null,
+          "titleTooltip": "",
+          "widgetCss": "",
+          "pageSize": 1024,
+          "noDataDisplayMessage": ""
         },
         "row": 0,
         "col": 0,
@@ -439,8 +454,8 @@
                 "col": 0
               },
               "075b1307-f547-2362-1feb-26e83e61b7c8": {
-                "sizeX": 9,
-                "sizeY": 8,
+                "sizeX": 10,
+                "sizeY": 9,
                 "row": 0,
                 "col": 13
               }

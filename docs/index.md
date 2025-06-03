@@ -98,19 +98,64 @@ http://127.0.0.1:8000/forecastWeather/?lat={your latitude}&lon={your longitude}
 
 ## ThingsBoard Usage Scenario
 
-This module can be integrated with the ThingsBoard IoT platform (https://thingsboard.io/) to visualize the retrieved and forecasted data on dashboards and to generate tables of irrigation water requirements.
+This module can be integrated with the ThingsBoard IoT platform to visualize real-time and forecasted data on customizable dashboards, as well as to generate irrigation water requirement tables.
 
-To connect ThingsBoard with this module, follow these steps:
-### 1. Configure ThingsBoard Rule Engine
+To streamline integration, we provide two Rule Chain JSON files and two Dashboard JSON files. These are located in the Thingsboard/ folder of the repository:
 
-Create a Rule Chain in ThingsBoard as illustrated in the figure below. This typically involves setting up nodes to interact with external REST APIs.
+### 📁 Provided Configuration Files
 
-![Rule engine and nodes ](thingsboard_rule.png)
+| **Type**     | **File Name**                            | **Description**                                           |
+|--------------|-------------------------------------------|-----------------------------------------------------------|
+| Rule Chain   | `rule_chain_get_satellite_data.json`      | Fetches satellite-based agroclimatic data                |
+| Rule Chain   | `rule_chain_forecast_eto_sm_data.json`    | Retrieves forecasted evapotranspiration (ET₀) and soil moisture data |
+| Dashboard    | `dashboard_climate_data.json`             | Displays climate and satellite-based data                |
+| Dashboard    | `dashboard_irrigation_forecast.json`      | Shows forecasted irrigation needs and charts             |
 
-### 2. Invoke APIs from "REST API Call Node"
 
-Within the "REST API Call Node" in your ThingsBoard Rule Chain, configure it to invoke the appropriate API endpoints provided by this module (e.g., /satweather or /forecastWeather) to fetch the required data. Refer to the ThingsBoard documentation for detailed instructions on configuring REST API calls.
+### Step-by-Step Integration with ThingsBoard
+1. Import the Rule Chains
 
+    Log in to your ThingsBoard instance as a Tenant Administrator.
+
+    Navigate to Rule Chains from the left-hand menu.
+
+    Click the "Import Rule Chain" button (folder icon at the top).
+
+    Upload the following files from the Thingsboard/ directory:
+
+        rule_chain_get_satellite_data.json
+
+        rule_chain_forecast_eto_sm_data.json
+
+    Activate the rule chains as needed.
+
+2. Import the Dashboards
+
+    Go to the Dashboards section in ThingsBoard.
+
+    Click the "+" icon and select "Import Dashboard".
+
+    Upload:
+
+        dashboard_climate_data.json
+
+        dashboard_irrigation_forecast.json
+
+    Assign the dashboards to relevant devices or assets if required.
+
+3. REST API Integration via Rule Engine
+
+Within the imported rule chains, "REST API Call Nodes" are used to pull data from your module:
+
+    Satellite Weather Endpoint: /satweather
+
+    Forecast Weather & Irrigation Data: /forecastWeather
+
+These API nodes are pre-configured but should be reviewed to:
+
+    Set the correct base URL for your hosted API server
+
+    Include any necessary authentication headers or tokens
 
 
 

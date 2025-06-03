@@ -227,7 +227,7 @@ def load_model(filename):
 def model_predict_sm(roi):
     """This function predicts sm"""
     #model_predict_sm = pickle.load(open('./models/modelo_humedad_suelo.pkl','rb'))
-    model_predict_sm = load_model('modelo_humedad_suelo.pkl')
+    model_predict_sm = load_model('model_sm.pkl')
     current_date = datetime.now().date() - timedelta(days=5)
     end_date = current_date.strftime("%Y-%m-%d")
     days_ago = current_date - timedelta(days=18)
@@ -244,7 +244,7 @@ def model_predict_sm(roi):
 def model_predict_eto(roi,lon,lat):
     """This function predicts eto"""
     #model_predict_eto = pickle.load(open('./models/modelo_ETo-2.pkl','rb'))
-    model_predict_eto = load_model('modelo_ETo-2.pkl')
+    model_predict_eto = load_model('model_ETo-2.pkl')
     current_date = datetime.now().date() - timedelta(days=4)
     end_date = current_date.strftime("%Y-%m-%d")
     days_ago = current_date - timedelta(days=31)

@@ -75,14 +75,14 @@
             "hideTimezone": false,
             "selectedTab": 1,
             "history": {
-              "historyType": 1,
+              "historyType": 2,
               "timewindowMs": 4752000000,
-              "interval": 18000000,
+              "interval": 7200000,
               "fixedTimewindow": {
                 "startTimeMs": 1721192400000,
                 "endTimeMs": 1721451600000
               },
-              "quickInterval": "CURRENT_DAY"
+              "quickInterval": "PREVIOUS_WEEK_ISO"
             },
             "aggregation": {
               "type": "AVG",
@@ -448,14 +448,14 @@
             "hideTimezone": false,
             "selectedTab": 1,
             "history": {
-              "historyType": 1,
+              "historyType": 2,
               "timewindowMs": 5184000000,
-              "interval": 18000000,
+              "interval": 7200000,
               "fixedTimewindow": {
                 "startTimeMs": 1721192400000,
                 "endTimeMs": 1721451600000
               },
-              "quickInterval": "CURRENT_DAY"
+              "quickInterval": "PREVIOUS_WEEK_ISO"
             },
             "aggregation": {
               "type": "AVG",
@@ -579,14 +579,14 @@
             "hideTimezone": false,
             "selectedTab": 1,
             "history": {
-              "historyType": 1,
-              "timewindowMs": 4752000000,
-              "interval": 7200000,
+              "historyType": 2,
+              "timewindowMs": 604800000,
+              "interval": 86400000,
               "fixedTimewindow": {
-                "startTimeMs": 1721019600000,
-                "endTimeMs": 1721451600000
+                "startTimeMs": 1746942371146,
+                "endTimeMs": 1747028771146
               },
-              "quickInterval": "CURRENT_DAY"
+              "quickInterval": "PREVIOUS_WEEK_ISO"
             },
             "aggregation": {
               "type": "AVG",
@@ -732,34 +732,28 @@
     },
     "filters": {},
     "timewindow": {
-      "displayValue": "",
       "hideInterval": false,
       "hideLastInterval": false,
       "hideQuickInterval": false,
       "hideAggregation": false,
       "hideAggInterval": false,
       "hideTimezone": false,
-      "selectedTab": 0,
-      "realtime": {
-        "realtimeType": 0,
-        "interval": 1000,
-        "timewindowMs": 60000,
-        "quickInterval": "CURRENT_DAY"
-      },
+      "selectedTab": 1,
       "history": {
-        "historyType": 0,
-        "interval": 1000,
+        "historyType": 2,
         "timewindowMs": 60000,
+        "interval": 1800000,
         "fixedTimewindow": {
           "startTimeMs": 1708994498185,
           "endTimeMs": 1709080898185
         },
-        "quickInterval": "CURRENT_DAY"
+        "quickInterval": "PREVIOUS_WEEK"
       },
       "aggregation": {
         "type": "AVG",
         "limit": 25000
-      }
+      },
+      "timezone": null
     },
     "settings": {
       "stateControllerId": "entity",

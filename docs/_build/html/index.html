@@ -316,16 +316,79 @@ Replace &quot;your-auth.json&quot; with the path to your Google Earth Engine pri
 </section>
 <section id="thingsboard-usage-scenario">
 <h2>ThingsBoard Usage Scenario<a class="headerlink" href="#thingsboard-usage-scenario" title="Permalink to this heading">¶</a></h2>
-<p>This module can be integrated with the ThingsBoard IoT platform (https://thingsboard.io/) to visualize the retrieved and forecasted data on dashboards and to generate tables of irrigation water requirements.</p>
-<p>To connect ThingsBoard with this module, follow these steps:</p>
-<section id="configure-thingsboard-rule-engine">
-<h3>1. Configure ThingsBoard Rule Engine<a class="headerlink" href="#configure-thingsboard-rule-engine" title="Permalink to this heading">¶</a></h3>
-<p>Create a Rule Chain in ThingsBoard as illustrated in the figure below. This typically involves setting up nodes to interact with external REST APIs.</p>
-<p><img alt="Rule engine and nodes " src="_images/thingsboard_rule.png" /></p>
+<p>This module can be integrated with the ThingsBoard IoT platform to visualize real-time and forecasted data on customizable dashboards, as well as to generate irrigation water requirement tables.</p>
+<p>To streamline integration, we provide two Rule Chain JSON files and two Dashboard JSON files. These are located in the Thingsboard/ folder of the repository:</p>
+<section id="provided-configuration-files">
+<h3>📁 Provided Configuration Files<a class="headerlink" href="#provided-configuration-files" title="Permalink to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Type</strong></p></th>
+<th class="head"><p><strong>File Name</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Rule Chain</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rule_chain_get_satellite_data.json</span></code></p></td>
+<td><p>Fetches satellite-based agroclimatic data</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rule Chain</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rule_chain_forecast_eto_sm_data.json</span></code></p></td>
+<td><p>Retrieves forecasted evapotranspiration (ET₀) and soil moisture data</p></td>
+</tr>
+<tr class="row-even"><td><p>Dashboard</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dashboard_climate_data.json</span></code></p></td>
+<td><p>Displays climate and satellite-based data</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dashboard</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dashboard_irrigation_forecast.json</span></code></p></td>
+<td><p>Shows forecasted irrigation needs and charts</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="invoke-apis-from-rest-api-call-node">
-<h3>2. Invoke APIs from “REST API Call Node”<a class="headerlink" href="#invoke-apis-from-rest-api-call-node" title="Permalink to this heading">¶</a></h3>
-<p>Within the “REST API Call Node” in your ThingsBoard Rule Chain, configure it to invoke the appropriate API endpoints provided by this module (e.g., /satweather or /forecastWeather) to fetch the required data. Refer to the ThingsBoard documentation for detailed instructions on configuring REST API calls.</p>
+<section id="step-by-step-integration-with-thingsboard">
+<h3>Step-by-Step Integration with ThingsBoard<a class="headerlink" href="#step-by-step-integration-with-thingsboard" title="Permalink to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Import the Rule Chains</p>
+<p>Log in to your ThingsBoard instance as a Tenant Administrator.</p>
+<p>Navigate to Rule Chains from the left-hand menu.</p>
+<p>Click the “Import Rule Chain” button (folder icon at the top).</p>
+<p>Upload the following files from the Thingsboard/ directory:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> rule_chain_get_satellite_data.json
+
+ rule_chain_forecast_eto_sm_data.json
+</pre></div>
+</div>
+<p>Activate the rule chains as needed.</p>
+</li>
+<li><p>Import the Dashboards</p>
+<p>Go to the Dashboards section in ThingsBoard.</p>
+<p>Click the “+” icon and select “Import Dashboard”.</p>
+<p>Upload:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> dashboard_climate_data.json
+
+ dashboard_irrigation_forecast.json
+</pre></div>
+</div>
+<p>Assign the dashboards to relevant devices or assets if required.</p>
+</li>
+<li><p>REST API Integration via Rule Engine</p></li>
+</ol>
+<p>Within the imported rule chains, “REST API Call Nodes” are used to pull data from your module:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Satellite Weather Endpoint: /satweather
+
+Forecast Weather &amp; Irrigation Data: /forecastWeather
+</pre></div>
+</div>
+<p>These API nodes are pre-configured but should be reviewed to:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Set the correct base URL for your hosted API server
+
+Include any necessary authentication headers or tokens
+</pre></div>
+</div>
 <p>Note: This documentation assumes basic familiarity with Python, virtual environments, and REST APIs. For detailed information on Google Earth Engine authentication, please refer to the official GEE documentation.</p>
 </section>
 </section>
@@ -382,8 +445,8 @@ Replace &quot;your-auth.json&quot; with the path to your Google Earth Engine pri
 </ul>
 </li>
 <li><a class="reference internal" href="#thingsboard-usage-scenario">ThingsBoard Usage Scenario</a><ul>
-<li><a class="reference internal" href="#configure-thingsboard-rule-engine">1. Configure ThingsBoard Rule Engine</a></li>
-<li><a class="reference internal" href="#invoke-apis-from-rest-api-call-node">2. Invoke APIs from “REST API Call Node”</a></li>
+<li><a class="reference internal" href="#provided-configuration-files">📁 Provided Configuration Files</a></li>
+<li><a class="reference internal" href="#step-by-step-integration-with-thingsboard">Step-by-Step Integration with ThingsBoard</a></li>
 </ul>
 </li>
 </ul>
