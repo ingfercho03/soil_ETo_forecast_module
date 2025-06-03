@@ -244,7 +244,26 @@
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Satellite Data Retrieval:</strong> Access historical ETo and SM data as time series from satellite products.</p></li>
-<li><p><strong>Machine Learning Forecasting:</strong> Predict future ETo and SM values using integrated machine learning models.</p></li>
+<li><p><strong>Machine Learning Forecasting:</strong> Predict future ETo and SM values using integrated machine learning models. The repository includes two pre-trained machine learning models used for forecasting key agroclimatic variables:</p></li>
+</ul>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>File Name</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">model_ETo-2.pkl</span></code></p></td>
+<td><p>Forecasts <strong>reference evapotranspiration (ET₀)</strong> based on weather and climate inputs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">model_sm.pkl</span></code></p></td>
+<td><p>Predicts <strong>soil moisture levels</strong> using historical and forecasted weather data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
 <li><p><strong>API Interface:</strong> Exposes data retrieval and forecasting functionalities via a RESTful API for easy integration.</p></li>
 <li><p><strong>ThingsBoard Integration:</strong> Designed to facilitate data visualization and irrigation water requirement calculations within the ThingsBoard IoT platform.</p></li>
 </ul>

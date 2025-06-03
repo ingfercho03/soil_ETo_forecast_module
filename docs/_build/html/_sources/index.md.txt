@@ -5,8 +5,16 @@ This module provides functionalities for retrieving reference evapotranspiration
 ## Features
 
 * **Satellite Data Retrieval:** Access historical ETo and SM data as time series from satellite products.
-* **Machine Learning Forecasting:** Predict future ETo and SM values using integrated machine learning models.
+
+* **Machine Learning Forecasting:** Predict future ETo and SM values using integrated machine learning models. The repository includes two pre-trained machine learning models used for forecasting key agroclimatic variables:
+
+| **File Name**         | **Description**                                                                 |
+|-----------------------|---------------------------------------------------------------------------------|
+| `model_ETo-2.pkl`     | Forecasts **reference evapotranspiration (ET₀)** based on weather and climate inputs. |
+| `model_sm.pkl`        | Predicts **soil moisture levels** using historical and forecasted weather data.       |
+
 * **API Interface:** Exposes data retrieval and forecasting functionalities via a RESTful API for easy integration.
+
 * **ThingsBoard Integration:** Designed to facilitate data visualization and irrigation water requirement calculations within the ThingsBoard IoT platform.
 
 ## Installation
@@ -104,6 +112,7 @@ To streamline integration, we provide two Rule Chain JSON files and two Dashboar
 
 ### 📁 Provided Configuration Files
 
+
 | **Type**     | **File Name**                            | **Description**                                           |
 |--------------|-------------------------------------------|-----------------------------------------------------------|
 | Rule Chain   | `rule_chain_get_satellite_data.json`      | Fetches satellite-based agroclimatic data                |
@@ -113,6 +122,7 @@ To streamline integration, we provide two Rule Chain JSON files and two Dashboar
 
 
 ### Step-by-Step Integration with ThingsBoard
+
 1. Import the Rule Chains
 
     Log in to your ThingsBoard instance as a Tenant Administrator.

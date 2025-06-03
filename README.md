@@ -27,7 +27,11 @@ This repository hosts the code and resources for a comprehensive module designed
     ├── setup.py           <- Package setup file for installation.
     │
     └── eto_sm_module      <- Core project source code. This is the main Python package.
-        ├── models         <- Machine learning models.
+        ├── models                <- Machine learning models.
+
+            ├── model_Eto-2.pkl   <- Forecasts reference evapotranspiration (ET₀)   based on weather and climate inputs.
+
+            ├── model_sm.pkl      <- Predicts soil moisture levels using historical and forecasted weather data.
     │
     └── thingsboard        <- Configuration files for ThingsBoard integration.  
 
