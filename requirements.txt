@@ -22,7 +22,7 @@ google-crc32c==1.5.0
 google-resumable-media==2.7.0
 googleapis-common-protos==1.63.0
 greenlet==3.0.3
-h11==0.14.0
+h11==0.16.0
 httplib2==0.22.0
 idna==3.6
 importlib-metadata==7.1.0
